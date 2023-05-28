@@ -5,7 +5,7 @@
 * Professor: Abrantes, Turma SI1N
 * Monitor(a): Suellen Miranda
 
-> Essa atividade avaliativa foi realizado para a matéria de Design e Desenvolvimento de Banco de Dados na Universidade de Vila Velha
+` Essa atividade avaliativa foi realizado para a matéria de Design e Desenvolvimento de Banco de Dados na Universidade de Vila Velha no 1º período de Sistemas de Informação em 2023`
 
 ## O que é o Pset?
  O PSET é uma Atividade avaliativa ministrada pelo professor de banco de dados Professor Abrantes, o objetivo do aluno proposto a fazer essa atividade avaliativa é um conjunto de exercícios quais incluem: criar e manter um banco de dados de acordo com as instruções de seu professor, atividades discursivas sobre a matéria e criação lógica do banco de dados.O aluno deverá que buscar em documentações,fórums e matérias passadas em sala de aula procurar por respostas para cada  objetivo passado na atividade avaliativa
