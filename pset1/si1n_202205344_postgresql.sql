@@ -317,6 +317,7 @@ ADD CONSTRAINT cc_pedidos_pedido_id
 CHECK (pedido_id > 0)
 ;
 
+--Verificação para garantir que ao menos um dos endereços na tabela loja esteja cadastrado
 ALTER TABLE lojas
 ADD CONSTRAINT cc_lojas_endereço_cadastrado
 CHECK ((endereço_físico IS NOT NULL) OR (endereço_web IS NOT NULL))
