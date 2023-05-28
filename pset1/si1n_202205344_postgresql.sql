@@ -256,52 +256,68 @@ ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
 --Criação da Verificação por meio do Check seguindo o PDF
+
+--Verificação sugerida no PDF a um padrão de input
 ALTER TABLE pedidos
 ADD CONSTRAINT cc_pedidos_status
 CHECK(status='CANCELADO' or status='COMPLETO' or status='ABERTO' or status='PAGO' or status='REEMBOLSADO' or status='ENVIADO')
 ;
 
+--Verificação sugerida no PDF a um padrão de input
 ALTER TABLE envios
 ADD CONSTRAINT cc_envios_status
 CHECK(status='CRIADO' or status='ENVIADO' or status='TRANSITO' or status='ENTREGUE')
 ;
 
+--Verificação de preço unitário na tabela produtos não ser negativo
 ALTER TABLE produtos
 ADD CONSTRAINT cc_produtos_preco_unitario
 CHECK (preco_unitario >= 0)
 ;
 
+--Verificação de preço unitário na tabela pedidos_itens não ser negativo
 ALTER TABLE pedidos_itens
 ADD CONSTRAINT cc_pedidos_items_preco_unitario
 CHECK (preco_unitario >= 0)
 ;
 
+--Verificação de produto_id não ser negativo
 ALTER TABLE produtos
 ADD CONSTRAINT cc_produtos_produto_id
 CHECK (produto_id > 0)
 ;
 
+--Verificação de loja_id não ser negativo
 ALTER TABLE lojas
 ADD CONSTRAINT cc_lojas_loja_id
 CHECK (loja_id > 0)
 ;
 
+--Verificação de estoque_id não ser negativo
 ALTER TABLE estoques
 ADD CONSTRAINT cc_estoques_estoque_id
 CHECK (estoque_id > 0) 
 ;
 
+--Verificação de cliente_id não ser negativo
 ALTER TABLE clientes
 ADD CONSTRAINT cc_clientes_cliente_id
 CHECK (cliente_id > 0)
 ;
 
+--Verificação de envio_id não ser negativo
 ALTER TABLE envios
 ADD CONSTRAINT cc_envios_envio_id
 CHECK (envio_id > 0)
 ;
 
+--Verificação de pedido_id não ser negativo
 ALTER TABLE pedidos
 ADD CONSTRAINT cc_pedidos_pedido_id
 CHECK (pedido_id > 0)
+;
+
+ALTER TABLE lojas
+ADD CONSTRAINT cc_lojas_endereço_cadastrado
+CHECK ((endereço_físico IS NOT NULL) OR (endereço_web IS NOT NULL))
 ;
