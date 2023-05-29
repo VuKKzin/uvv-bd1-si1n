@@ -1,9 +1,6 @@
-
 --Apagando a database uvv, usuário e esquema para evitar conflitos de duplicados
 DROP DATABASE IF EXISTS uvv;
 DROP user if exists williamrodrigues;
-DROP schema if exists lojas;
-
 
 --Criando usuário e configurando seus direitos
 create user williamrodrigues with
@@ -11,10 +8,14 @@ CREATEDB
 CREATEROLE
 encrypted password 'teste';
 
---Usando o usuário
-SET ROLE williamrodrigues;
+/*
+ Usando o usuário para logar no Banco de Dados 
+*/
+\c 'postgresql://williamrodrigues:teste@localhost/postgres'
 
--- CRIANDO o Banco de Dados
+/*
+  CRIANDO o Banco de Dados da UVV
+*/
 CREATE database uvv WITH
 owner             = williamrodrigues
 template          = template0
@@ -23,19 +24,26 @@ LC_collate        = "pt_BR.UTF-8"
 LC_CTYPE          = "pt_BR.UTF-8"
 ALLOW_CONNECTIONS = true;
 
+COMMENT ON DATABASE uvv IS 'Banco de Dados da UVV';
+
 --Usando o Bando de Dados UVV
 \c uvv
-set role williamrodrigues;
-
-SELECT current_user;
 
 Create schema lojas
 authorization williamrodrigues;
 
+SET SEARCH_PATH to lojas, "$user", public;
+
 ALTER USER williamrodrigues;
 SET SEARCH_PATH TO lojas, "$user", public;
 
---Criação da tabela produtos e distribuindo seus atributos
+/*
+ A partir daqui todas as tabelas são criadas, comentadas e tem seus atributos  configurados seguindo em base o projeto de Banco de Dados Lógico criado no Power Architech
+ */
+ 
+/*  
+Criação da tabela produtos e distribuindo seus atributos seguindo em base o projeto de Banco de Dados Lógico
+*/
 CREATE TABLE produtos (
                 produto_id NUMERIC(38) NOT NULL,
                 nome VARCHAR(255) NOT NULL,
@@ -61,7 +69,9 @@ COMMENT ON COLUMN produtos.imagem_ultima_atualizacao IS 'ultima atualização da
 COMMENT ON COLUMN produtos.imagem_arquivo IS 'arquivo da imagem do produto';
 COMMENT ON COLUMN produtos.imagem_meme_type IS 'imagem do produto meme type';
 
---Criação da tabela lojas e distribuindo seus atributos
+/*
+Criação da tabela lojas e distribuindo seus atributos seguindo em base o projeto de Banco de Dados Lógico
+*/
 CREATE TABLE lojas (
                 loja_id NUMERIC(38) NOT NULL,
                 nome VARCHAR(255) NOT NULL,
@@ -91,7 +101,9 @@ COMMENT ON COLUMN lojas.logo_mime_type IS 'logo da loja em mime type';
 COMMENT ON COLUMN lojas.logo IS 'logo da loja';
 COMMENT ON COLUMN lojas.latitude IS 'latitude em que esta a loja';
 
---Criação da tabela Estoques e distribuindo seus atributos
+/*  
+Criação da tabela Estoques e distribuindo seus atributos seguindo em base o projeto de Banco de Dados Lógico
+*/
 CREATE TABLE estoques (
                 estoque_id NUMERIC(38) NOT NULL,
                 quantidade NUMERIC(38) NOT NULL,
@@ -107,7 +119,9 @@ COMMENT ON COLUMN estoques.quantidade IS 'Quantidade de Itens armazenados no est
 COMMENT ON COLUMN estoques.loja_id IS 'ID de relação da tabela lojas com a tabela estoques';
 COMMENT ON COLUMN estoques.produto_id IS 'ID de relação da tabela produtos com a tabela estoques';
 
---Criação da tabela Clientes e distribuindo seus  atributos
+ /*
+ Criação da tabela Clientes e distribuindo seus  atributos seguindo em base o projeto de Banco de Dados Lógico
+ */
 CREATE TABLE clientes (
                 cliente_id NUMERIC(38) NOT NULL,
                 email VARCHAR(255) NOT NULL,
@@ -127,7 +141,9 @@ COMMENT ON COLUMN clientes.telefone2 IS 'email do segundo telefone para o cadast
 COMMENT ON COLUMN clientes.nome IS 'email do nome para o cadastro';
 COMMENT ON COLUMN clientes.telefone3 IS 'email doterceiro telefone para o cadastro';
 
---Criação da tabela Envios e distribuindo seus atributos
+/*
+Criação da tabela Envios e distribuindo seus atributos seguindo em base o projeto de Banco de Dados Lógico
+*/
 CREATE TABLE envios (
                 envio_id NUMERIC(38) NOT NULL,
                 endereco_entrega VARCHAR(512) NOT NULL,
@@ -145,7 +161,9 @@ COMMENT ON COLUMN envios.status IS 'status do envio';
 COMMENT ON COLUMN envios.cliente_id IS 'id do cliente a receber da tabela clientes';
 COMMENT ON COLUMN envios.loja_id IS 'loja que ocorreu a compra, da tabela lojas';
 
---Criação da tabela Pedidos e distribuindo seus atributos
+/*
+Criação da tabela Pedidos e distribuindo seus atributos seguindo em base o projeto de Banco de Dados Lógico
+*/
 CREATE TABLE pedidos (
                 pedido_id NUMERIC(38) NOT NULL,
                 data_hora TIMESTAMP NOT NULL,
@@ -163,7 +181,9 @@ COMMENT ON COLUMN pedidos.status IS 'status do pedido';
 COMMENT ON COLUMN pedidos.cliente_id IS 'qual o id do cliente que fez o pedido da compra da tabela clientes';
 COMMENT ON COLUMN pedidos.loja_id IS 'qual loja que foi efetuado o pedido da tabela lojas';
 
---Criação da tabela Pedidos_itens e distribuindo seus atributos
+/*
+Criação da tabela Pedidos_itens e distribuindo seus atributos seguindo em base o projeto de Banco de Dados Lógico
+*/
 CREATE TABLE pedidos_itens (
                 produto_id NUMERIC(38) NOT NULL,
                 pedido_id NUMERIC(38) NOT NULL,
@@ -182,6 +202,10 @@ COMMENT ON COLUMN pedidos_itens.numero_da_linha IS 'numero da linha do pedido';
 COMMENT ON COLUMN pedidos_itens.preco_unitario IS 'preço do pedido';
 COMMENT ON COLUMN pedidos_itens.quantidade IS 'quantidade comprada do pedido';
 COMMENT ON COLUMN pedidos_itens.envio_id IS 'envio do pedido da tabela envios';
+
+/*
+ Criação dos relacionamentes chaves estrangeiras entre as tabelas  do BD
+*/
 
 --Criação do relacionamento da chave estrangeira entre as tabelas pedidos_itens e produtos
 ALTER TABLE pedidos_itens ADD CONSTRAINT produtos_pedidos_itens_fk
@@ -255,7 +279,9 @@ ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
---Criação da Verificação por meio do Check seguindo o PDF
+/*
+Criação da Verificação por meio do Check seguindo o PDF e outros que encontrei necessários
+*/
 
 --Verificação sugerida no PDF a um padrão de input
 ALTER TABLE pedidos
