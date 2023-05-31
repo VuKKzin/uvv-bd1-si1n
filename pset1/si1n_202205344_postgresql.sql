@@ -1,6 +1,24 @@
+/*
+================================================================================================================
+								Projeto de Banco de Dados UVV
+						-------------------------------------------
+	Aluno: William Rodrigues Andrade
+	Matrícula:202205344
+	Professor: Abrantes Araújo Silva Filho
+
+================================================================================================================
+*/
+
+/*
+	Esta parte inicial será apagado o banco de dados e usuário por segurança 
+	para assim criar o usuar e banco de dados
+
+*/
+
 --Apagando a database uvv, usuário e esquema para evitar conflitos de duplicados
 DROP DATABASE IF EXISTS uvv;
 DROP user if exists williamrodrigues;
+
 
 --Criando usuário e configurando seus direitos
 create user williamrodrigues with
@@ -13,9 +31,7 @@ encrypted password 'teste';
 */
 \c 'postgresql://williamrodrigues:teste@localhost/postgres'
 
-/*
-  CRIANDO o Banco de Dados da UVV
-*/
+-- CRIANDO o Banco de Dados
 CREATE database uvv WITH
 owner             = williamrodrigues
 template          = template0
@@ -24,7 +40,7 @@ LC_collate        = "pt_BR.UTF-8"
 LC_CTYPE          = "pt_BR.UTF-8"
 ALLOW_CONNECTIONS = true;
 
-COMMENT ON DATABASE uvv IS 'Banco de Dados da UVV';
+COMMENT ON DATABASE uvv IS 'Banco de Dados da lojas UVV';
 
 --Usando o Bando de Dados UVV
 \c uvv
@@ -34,16 +50,14 @@ authorization williamrodrigues;
 
 SET SEARCH_PATH to lojas, "$user", public;
 
-ALTER USER williamrodrigues;
+ALTER USER williamrodrigues
 SET SEARCH_PATH TO lojas, "$user", public;
 
 /*
  A partir daqui todas as tabelas são criadas, comentadas e tem seus atributos  configurados seguindo em base o projeto de Banco de Dados Lógico criado no Power Architech
  */
- 
-/*  
-Criação da tabela produtos e distribuindo seus atributos seguindo em base o projeto de Banco de Dados Lógico
-*/
+
+--Criação da tabela produtos e distribuindo seus atributos
 CREATE TABLE produtos (
                 produto_id NUMERIC(38) NOT NULL,
                 nome VARCHAR(255) NOT NULL,
@@ -69,9 +83,7 @@ COMMENT ON COLUMN produtos.imagem_ultima_atualizacao IS 'ultima atualização da
 COMMENT ON COLUMN produtos.imagem_arquivo IS 'arquivo da imagem do produto';
 COMMENT ON COLUMN produtos.imagem_meme_type IS 'imagem do produto meme type';
 
-/*
-Criação da tabela lojas e distribuindo seus atributos seguindo em base o projeto de Banco de Dados Lógico
-*/
+--Criação da tabela lojas e distribuindo seus atributos
 CREATE TABLE lojas (
                 loja_id NUMERIC(38) NOT NULL,
                 nome VARCHAR(255) NOT NULL,
@@ -101,9 +113,7 @@ COMMENT ON COLUMN lojas.logo_mime_type IS 'logo da loja em mime type';
 COMMENT ON COLUMN lojas.logo IS 'logo da loja';
 COMMENT ON COLUMN lojas.latitude IS 'latitude em que esta a loja';
 
-/*  
-Criação da tabela Estoques e distribuindo seus atributos seguindo em base o projeto de Banco de Dados Lógico
-*/
+--Criação da tabela Estoques e distribuindo seus atributos
 CREATE TABLE estoques (
                 estoque_id NUMERIC(38) NOT NULL,
                 quantidade NUMERIC(38) NOT NULL,
@@ -119,9 +129,7 @@ COMMENT ON COLUMN estoques.quantidade IS 'Quantidade de Itens armazenados no est
 COMMENT ON COLUMN estoques.loja_id IS 'ID de relação da tabela lojas com a tabela estoques';
 COMMENT ON COLUMN estoques.produto_id IS 'ID de relação da tabela produtos com a tabela estoques';
 
- /*
- Criação da tabela Clientes e distribuindo seus  atributos seguindo em base o projeto de Banco de Dados Lógico
- */
+--Criação da tabela Clientes e distribuindo seus  atributos
 CREATE TABLE clientes (
                 cliente_id NUMERIC(38) NOT NULL,
                 email VARCHAR(255) NOT NULL,
@@ -141,9 +149,7 @@ COMMENT ON COLUMN clientes.telefone2 IS 'email do segundo telefone para o cadast
 COMMENT ON COLUMN clientes.nome IS 'email do nome para o cadastro';
 COMMENT ON COLUMN clientes.telefone3 IS 'email doterceiro telefone para o cadastro';
 
-/*
-Criação da tabela Envios e distribuindo seus atributos seguindo em base o projeto de Banco de Dados Lógico
-*/
+--Criação da tabela Envios e distribuindo seus atributos
 CREATE TABLE envios (
                 envio_id NUMERIC(38) NOT NULL,
                 endereco_entrega VARCHAR(512) NOT NULL,
@@ -161,9 +167,7 @@ COMMENT ON COLUMN envios.status IS 'status do envio';
 COMMENT ON COLUMN envios.cliente_id IS 'id do cliente a receber da tabela clientes';
 COMMENT ON COLUMN envios.loja_id IS 'loja que ocorreu a compra, da tabela lojas';
 
-/*
-Criação da tabela Pedidos e distribuindo seus atributos seguindo em base o projeto de Banco de Dados Lógico
-*/
+--Criação da tabela Pedidos e distribuindo seus atributos
 CREATE TABLE pedidos (
                 pedido_id NUMERIC(38) NOT NULL,
                 data_hora TIMESTAMP NOT NULL,
@@ -181,9 +185,7 @@ COMMENT ON COLUMN pedidos.status IS 'status do pedido';
 COMMENT ON COLUMN pedidos.cliente_id IS 'qual o id do cliente que fez o pedido da compra da tabela clientes';
 COMMENT ON COLUMN pedidos.loja_id IS 'qual loja que foi efetuado o pedido da tabela lojas';
 
-/*
-Criação da tabela Pedidos_itens e distribuindo seus atributos seguindo em base o projeto de Banco de Dados Lógico
-*/
+--Criação da tabela Pedidos_itens e distribuindo seus atributos
 CREATE TABLE pedidos_itens (
                 produto_id NUMERIC(38) NOT NULL,
                 pedido_id NUMERIC(38) NOT NULL,
@@ -202,10 +204,6 @@ COMMENT ON COLUMN pedidos_itens.numero_da_linha IS 'numero da linha do pedido';
 COMMENT ON COLUMN pedidos_itens.preco_unitario IS 'preço do pedido';
 COMMENT ON COLUMN pedidos_itens.quantidade IS 'quantidade comprada do pedido';
 COMMENT ON COLUMN pedidos_itens.envio_id IS 'envio do pedido da tabela envios';
-
-/*
- Criação dos relacionamentes chaves estrangeiras entre as tabelas  do BD
-*/
 
 --Criação do relacionamento da chave estrangeira entre as tabelas pedidos_itens e produtos
 ALTER TABLE pedidos_itens ADD CONSTRAINT produtos_pedidos_itens_fk
@@ -279,72 +277,53 @@ ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-/*
-Criação da Verificação por meio do Check seguindo o PDF e outros que encontrei necessários
-*/
-
---Verificação sugerida no PDF a um padrão de input
+--Criação da Verificação por meio do Check seguindo o PDF
 ALTER TABLE pedidos
 ADD CONSTRAINT cc_pedidos_status
 CHECK(status='CANCELADO' or status='COMPLETO' or status='ABERTO' or status='PAGO' or status='REEMBOLSADO' or status='ENVIADO')
 ;
 
---Verificação sugerida no PDF a um padrão de input
 ALTER TABLE envios
 ADD CONSTRAINT cc_envios_status
 CHECK(status='CRIADO' or status='ENVIADO' or status='TRANSITO' or status='ENTREGUE')
 ;
 
---Verificação de preço unitário na tabela produtos não ser negativo
 ALTER TABLE produtos
 ADD CONSTRAINT cc_produtos_preco_unitario
 CHECK (preco_unitario >= 0)
 ;
 
---Verificação de preço unitário na tabela pedidos_itens não ser negativo
 ALTER TABLE pedidos_itens
 ADD CONSTRAINT cc_pedidos_items_preco_unitario
 CHECK (preco_unitario >= 0)
 ;
 
---Verificação de produto_id não ser negativo
 ALTER TABLE produtos
 ADD CONSTRAINT cc_produtos_produto_id
 CHECK (produto_id > 0)
 ;
 
---Verificação de loja_id não ser negativo
 ALTER TABLE lojas
 ADD CONSTRAINT cc_lojas_loja_id
 CHECK (loja_id > 0)
 ;
 
---Verificação de estoque_id não ser negativo
 ALTER TABLE estoques
 ADD CONSTRAINT cc_estoques_estoque_id
 CHECK (estoque_id > 0) 
 ;
 
---Verificação de cliente_id não ser negativo
 ALTER TABLE clientes
 ADD CONSTRAINT cc_clientes_cliente_id
 CHECK (cliente_id > 0)
 ;
 
---Verificação de envio_id não ser negativo
 ALTER TABLE envios
 ADD CONSTRAINT cc_envios_envio_id
 CHECK (envio_id > 0)
 ;
 
---Verificação de pedido_id não ser negativo
 ALTER TABLE pedidos
 ADD CONSTRAINT cc_pedidos_pedido_id
 CHECK (pedido_id > 0)
-;
-
---Verificação para garantir que ao menos um dos endereços na tabela loja esteja cadastrado
-ALTER TABLE lojas
-ADD CONSTRAINT cc_lojas_endereço_cadastrado
-CHECK ((endereço_físico IS NOT NULL) OR (endereço_web IS NOT NULL))
 ;
