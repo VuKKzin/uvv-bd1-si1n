@@ -11,7 +11,7 @@
 
 /*
 	Esta parte inicial será apagado o banco de dados e usuário por segurança 
-	para assim criar o usuar e banco de dados
+	para assim criar o usuário e banco de dados
 
 */
 
