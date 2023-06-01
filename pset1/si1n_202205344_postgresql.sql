@@ -222,7 +222,7 @@ ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
 --Criação do relacionamento da chave estrangeira entre as tabelas pedidos e lojas
-ALTER TABLE pedidos ADD CONSTRAINT lojas_pedidos_fk
+ALTER TABLE pedidos ADD CONSTRAINT lojas_pedidos_fkhttps://github.com/caiquealmr/uvv_bd1_si1n
 FOREIGN KEY (loja_id)
 REFERENCES lojas (loja_id)
 ON DELETE NO ACTION
@@ -232,7 +232,7 @@ NOT DEFERRABLE;
 --Criação do relacionamento da chave estrangeira entre as tabelas envios e lojas
 ALTER TABLE envios ADD CONSTRAINT lojas_envios_fk
 FOREIGN KEY (loja_id)
-REFERENCES lojas (loja_id)
+REFERENCES lojas (loja_id)https://github.com/caiquealmr/uvv_bd1_si1n
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
@@ -273,7 +273,7 @@ NOT DEFERRABLE;
 ALTER TABLE pedidos_itens ADD CONSTRAINT pedidos_pedidos_itens_fk
 FOREIGN KEY (pedido_id)
 REFERENCES pedidos (pedido_id)
-ON DELETE NO ACTION
+https://github.com/caiquealmr/uvv_bd1_si1nON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
@@ -288,6 +288,7 @@ ADD CONSTRAINT cc_envios_status
 CHECK(status='CRIADO' or status='ENVIADO' or status='TRANSITO' or status='ENTREGUE')
 ;
 
+-- Adição de Constraints de preço unitário não negativos
 ALTER TABLE produtos
 ADD CONSTRAINT cc_produtos_preco_unitario
 CHECK (preco_unitario >= 0)
@@ -298,6 +299,7 @@ ADD CONSTRAINT cc_pedidos_items_preco_unitario
 CHECK (preco_unitario >= 0)
 ;
 
+-- Criação de constraints para as PK's não serem negativas
 ALTER TABLE produtos
 ADD CONSTRAINT cc_produtos_produto_id
 CHECK (produto_id > 0)
@@ -326,4 +328,21 @@ CHECK (envio_id > 0)
 ALTER TABLE pedidos
 ADD CONSTRAINT cc_pedidos_pedido_id
 CHECK (pedido_id > 0)
+;
+
+-- Adição de Constraints de quantidade não negativas
+ALTER TABLE estoques
+ADD CONSTRAINT cc_estoques_quantidade
+CHECK (quantidade >= 0)
+;
+
+ALTER TABLE pedidos_itens
+ADD CONSTRAINT cc_pedidos_itens_quantidade
+CHECK (quantidade >= 0)
+;
+
+-- Criação de validação de checagem entre endereço fisico e web garantindo que ao menos uma seja preenchida
+ALTER TABLE lojas
+ADD CONSTRAINT cc_lojas_fisico_web
+CHECK ((endereco_fisico IS NOT NULL) OR (endereco_web IS NOT NULL))
 ;
