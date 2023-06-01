@@ -222,7 +222,7 @@ ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
 --Criação do relacionamento da chave estrangeira entre as tabelas pedidos e lojas
-ALTER TABLE pedidos ADD CONSTRAINT lojas_pedidos_fkhttps://github.com/caiquealmr/uvv_bd1_si1n
+ALTER TABLE pedidos ADD CONSTRAINT lojas_pedidos_fk
 FOREIGN KEY (loja_id)
 REFERENCES lojas (loja_id)
 ON DELETE NO ACTION
@@ -232,7 +232,7 @@ NOT DEFERRABLE;
 --Criação do relacionamento da chave estrangeira entre as tabelas envios e lojas
 ALTER TABLE envios ADD CONSTRAINT lojas_envios_fk
 FOREIGN KEY (loja_id)
-REFERENCES lojas (loja_id)https://github.com/caiquealmr/uvv_bd1_si1n
+REFERENCES lojas (loja_id)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
@@ -273,7 +273,7 @@ NOT DEFERRABLE;
 ALTER TABLE pedidos_itens ADD CONSTRAINT pedidos_pedidos_itens_fk
 FOREIGN KEY (pedido_id)
 REFERENCES pedidos (pedido_id)
-https://github.com/caiquealmr/uvv_bd1_si1nON DELETE NO ACTION
+ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
